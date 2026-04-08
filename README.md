@@ -245,9 +245,9 @@ Phase 4: Commit (커밋)
 
 ---
 
-## 🛠️ 환경 설정
+## 🛠️ 개발 도구 & 자동화
 
-### 필수 도구
+### 📋 기본 필수 도구
 
 | 도구 | 용도 | 설치 |
 | --- | --- | --- |
@@ -256,14 +256,87 @@ Phase 4: Commit (커밋)
 | **Gemma4-9B** | LLM 모델 | `ollama run gemma4:9b` |
 | **Git** | 버전 관리 | 설치 필요 |
 
-### 설정 가이드
+### 🤖 ZEN_A4 자동화 Agents
+
+ZEN_A4 방법론에서 3가지 훅(Hooks)으로 자동 실행되는 에이전트들:
+
+#### **PreToolUse Hook** (코드 작성 전)
+
+복잡도가 높은 기능 감지 시 자동 실행:
+
+| Agent | 역할 | 자동 실행 조건 |
+| --- | --- | --- |
+| **planner** | 구현 계획 수립 | 복잡한 기능 감지 |
+| **architect** | 아키텍처 검증 | 아키텍처 변경 감지 |
+| **security-reviewer** | 보안 검증 | 보안 관련 코드 감지 |
+
+#### **PostToolUse Hook** (코드 작성 후)
+
+모든 코드 자동 품질 검증:
+
+| Agent | 검증 항목 |
+| --- | --- |
+| **code-reviewer** | 가독성, 패턴, 최적화 |
+| **security-reviewer** | 보안 취약점, 인젝션, 암호화 |
+| **tdd-guide** | 테스트 커버리지, 격리, 모킹 |
+| **language-specific reviewers** | 언어별 관례, 성능, 안티패턴 |
+| **doc-updater** | 문서 완성도, 가독성 |
+
+#### **Stop Hook** (커밋 전)
+
+최종 품질 게이트 (80% 커버리지, Self Check/Test 통과, 보안 스캔 등):
 
 ```
-1. Ollama 설정
+커밋 차단 조건:
+❌ 테스트 커버리지 < 80%
+❌ Self Check 미통과 (Phase 1)
+❌ Self Test 미통과 (Phase 2)
+❌ 보안 스캔 실패
+❌ SAR 미작성 (오류 발견 시)
+
+✅ 모두 통과 → 커밋 가능
+```
+
+**자세히:** [101_ZEN_A4_METHODOLOGY.md](docs/00_GUIDE/101_ZEN_A4_METHODOLOGY.md)
+
+### 🔌 MCP Servers (선택 통합)
+
+| MCP | 용도 | 상태 |
+| --- | --- | --- |
+| **context7** | 라이브러리 문서 검색 | 옵션 |
+| **pencil** | 디자인 파일 편집 | 옵션 |
+
+**설정:** CLAUDE.md에서 mcp.allowedServers 구성
+
+### 📝 선택 도구
+
+| 도구 | 용도 | 설치 |
+| --- | --- | --- |
+| **TypeScript/JavaScript** | Node.js 프로젝트 | 필요시 |
+| **Python** | Python 프로젝트 | 필요시 |
+| **Docker** | 컨테이너화 | docs/09_TEMPLATES/040_SETUP_TEMPLATE/ |
+
+### 🔧 설정 가이드
+
+#### 기본 설정
+
+```
+1. Claude Code 설치 & Subscription 활성화
+2. Ollama 설정
    docs/09_TEMPLATES/040_SETUP_TEMPLATE/OLLAMA_DIRECT_INSTALL_TEMPLATE.md
 
-2. Docker Compose 설정 (팀 협업)
+3. ZEN_A4 Hooks 활성화
+   .claude/settings.json에서 hooks 구성
+```
+
+#### 팀 협업 설정
+
+```
+1. Docker Compose로 Ollama 표준화
    docs/09_TEMPLATES/040_SETUP_TEMPLATE/DOCKER_COMPOSE_OLLAMA_TEMPLATE.md
+
+2. MCP Servers 활성화
+   CLAUDE.md의 mcp 섹션 참고
 ```
 
 ---
