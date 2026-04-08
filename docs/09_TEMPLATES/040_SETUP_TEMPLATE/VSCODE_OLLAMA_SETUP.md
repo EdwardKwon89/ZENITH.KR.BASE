@@ -28,7 +28,16 @@ VS Code에서 Ollama를 사용하면:
 
 ---
 
-## 🚀 옵션 1: Continue.dev (추천)
+## 🚀 옵션 1: Continue - Open-source AI Code Agent (추천)
+
+### 소개
+
+**Continue**는 오픈소스 AI 코드 에이전트로:
+
+- 로컬 LLM (Ollama) 완벽 지원
+- Chat + 자동완성 + 코드 분석
+- 완전히 오픈소스 & 프라이빗
+- VS Code 통합
 
 ### Step 1: Ollama 확인
 
@@ -58,59 +67,56 @@ VS Code를 열고 확장 마켓플레이스 검색:
 
 2. **검색**: "Continue" 입력
 
-3. **설치**: "Continue - Code Autopilot" (공식 확장)
+3. **설치**: "Continue - Open-source AI Code Agent" (공식 확장)
    - 개발사: Continue Dev
+   - 설명: Open-source AI Code Agent
    - 다운로드: 100만+ (신뢰도 높음)
 
 ```
 확장 정보:
-이름: Continue - Code Autopilot
+이름: Continue - Open-source AI Code Agent
 ID: Continue.continue
 출판사: Continue Dev
 버전: 최신
+설명: AI-powered coding assistant with Ollama support
 ```
 
 ### Step 3: 설정 파일 생성
 
 1. **설정 폴더 열기**
-   - Mac: `~/.continue/config.json`
-   - Windows: `%USERPROFILE%\.continue\config.json`
-   - Linux: `~/.continue/config.json`
+   - Mac: `~/.continue/config.yaml`
+   - Windows: `%USERPROFILE%\.continue\config.yaml`
+   - Linux: `~/.continue/config.yaml`
 
 2. **없으면 생성**:
    ```bash
    # Mac/Linux
    mkdir -p ~/.continue
-   touch ~/.continue/config.json
+   touch ~/.continue/config.yaml
    
    # Windows (PowerShell)
    New-Item -Path "$env:USERPROFILE\.continue" -ItemType Directory -Force
-   New-Item -Path "$env:USERPROFILE\.continue\config.json" -ItemType File -Force
+   New-Item -Path "$env:USERPROFILE\.continue\config.yaml" -ItemType File -Force
    ```
 
-3. **설정 파일 작성**: `config.json`
-   ```json
-   {
-     "models": [
-       {
-         "title": "Ollama - Gemma4",
-         "provider": "ollama",
-         "model": "gemma4:9b",
-         "apiBase": "http://localhost:11434"
-       }
-     ],
-     "tabAutocompleteModel": {
-       "title": "Ollama - Gemma4",
-       "provider": "ollama",
-       "model": "gemma4:9b",
-       "apiBase": "http://localhost:11434"
-     },
-     "embeddingsProvider": {
-       "provider": "ollama",
-       "model": "nomic-embed-text",
-       "apiBase": "http://localhost:11434"
-     }
-   }
+3. **설정 파일 작성**: `config.yaml`
+   ```yaml
+   models:
+     - title: "Ollama - Gemma4"
+       provider: "ollama"
+       model: "gemma4:9b"
+       apiBase: "http://localhost:11434"
+   
+   tabAutocompleteModel:
+     title: "Ollama - Gemma4"
+     provider: "ollama"
+     model: "gemma4:9b"
+     apiBase: "http://localhost:11434"
+   
+   embeddingsProvider:
+     provider: "ollama"
+     model: "nomic-embed-text"
+     apiBase: "http://localhost:11434"
    ```
 
 ### Step 4: VS Code 설정 업데이트
@@ -246,7 +252,7 @@ export OLLAMA_MODELS=~/.ollama/models
 
 ### 모델 전환
 
-`config.json`에서 모델 변경:
+`config.yaml`에서 모델 변경:
 
 ```json
 {
@@ -308,8 +314,8 @@ curl http://localhost:11434/api/tags
 
 **해결:**
 ```bash
-# 1. config.json 경로 확인
-# Mac: ~/.continue/config.json 존재?
+# 1. config.yaml 경로 확인
+# Mac: ~/.continue/config.yaml 존재?
 
 # 2. VS Code 재시작
 # Ctrl+Shift+P > "Developer: Reload Window"
@@ -342,7 +348,7 @@ ollama pull gemma4:9b
 # 2. 설치된 모델 확인
 ollama list
 
-# 3. config.json에서 모델명 정확히 확인
+# 3. config.yaml에서 모델명 정확히 확인
 # "model": "gemma4:9b" (공백 주의)
 ```
 
@@ -377,7 +383,7 @@ ollama list
 □ Ollama 서버 실행 중 (ollama serve)
 □ 포트 확인 (curl http://localhost:11434/api/tags)
 □ Continue 확장 설치
-□ config.json 파일 생성 및 설정
+□ config.yaml 파일 생성 및 설정
 □ VS Code 재시작
 □ Chat 창에서 테스트 성공
 □ 자동완성 기능 작동 확인
