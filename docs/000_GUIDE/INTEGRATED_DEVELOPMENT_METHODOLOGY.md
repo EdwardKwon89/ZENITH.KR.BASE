@@ -375,6 +375,10 @@ docs/ARCHITECTURE.md
 # 체크리스트: 설계가 완성되었는가?
 
 □ 아키텍처 검증
+
+  □ Null 체크 설계 포함되었는가?
+  □ 엣지 케이스 처리 계획이 있는가?
+  □ 에러 처리 전략이 명시되었는가?
   □ 모든 요구사항이 반영되었는가?
   □ 순환 의존성이 없는가?
   □ 확장성이 고려되었는가?
@@ -399,7 +403,42 @@ docs/ARCHITECTURE.md
 
 ✅ 모두 확인되면 Phase 2로 진행
 ❌ 미확인 항목이 있으면 재검토
+
+#### 1-6. **Self Check 미통과 시: SAR 작성** ⭐
+
+**Self Check에서 "미통과" 항목 발견 시 필수 작업:**
+
+```text
+Step 1: Self_Audit_Report (SAR) 생성
+  파일: docs/081_Self_Audit/SAR_reports/SAR_YYYY-MM-DD_NNN_문제_분류.md
+  
+Step 2: SAR 작성 (필수 항목)
+  ├─ 메타정보: 버전, 작성일, 작성자, 개요
+  ├─ 현상: 무엇이 미통과되었는가?
+  ├─ 원인: 왜 미통과되었는가?
+  ├─ 조치: 설계를 어떻게 개선할 것인가?
+  └─ 개정이력: 수정 기록
+
+Step 3: 000_SAR_README.md에 목록 추가
+  테이블에 새로운 SAR 행 추가
+
+Step 4: Check List 업데이트 (중요!)
+  Self Check 항목에 동일 오류 방지용 체크 항목 추가
+  
+  예시:
+  원래: □ 아키텍처 검증
+  수정: □ 아키텍처 검증
+        □ Null 체크 설계 포함: ✓ (SAR-001)
+        □ 엣지 케이스 처리: ✓ (SAR-001)
+
+Step 5: 설계 수정 & Phase 2로 진행
 ```
+
+**참고:**
+- SAR 작성 규칙: [docs/081_Self_Audit/SAR_RP_개요.md](../081_Self_Audit/SAR_RP_개요.md)
+- SAR 목록 관리: [docs/081_Self_Audit/000_SAR_README.md](../081_Self_Audit/000_SAR_README.md)
+
+
 
 **Self Check 미통과 예시:**
 ```
@@ -650,8 +689,47 @@ ZEN_A4 security-reviewer
 | 결과 | 상태 | 다음 단계 |
 | --- | --- | --- |
 | ✅ 모두 통과 | **준비 완료** | Phase 3 검증으로 진행 |
-| ⚠️ 일부 실패 | **재작업** | 실패 부분 수정 후 재테스트 |
-| ❌ 실패 | **차단** | Phase 2 계속 (완료되지 않음) |
+| ⚠️ 일부 실패 | **재작업** | 실패 부분 수정 + SAR 작성 후 재테스트 |
+| ❌ 실패 | **차단** | Phase 2 계속 + SAR 작성 (완료되지 않음) |
+
+#### 2-7. **Self Test 미통과 시: SAR 작성** ⭐
+
+**Self Test에서 실패 발견 시 필수 작업:**
+
+```text
+Step 1: Self_Audit_Report (SAR) 생성
+  파일: docs/081_Self_Audit/SAR_reports/SAR_YYYY-MM-DD_NNN_문제_분류.md
+  
+Step 2: SAR 작성 (필수 항목)
+  ├─ 현상: 어떤 테스트가 실패했는가?
+  ├─ 원인: 코드의 어느 부분이 잘못되었는가?
+  ├─ 조치: 어떻게 수정했는가?
+  ├─ 검증: 테스트가 통과했는가?
+  └─ 예방: Check List에 추가할 항목은?
+
+Step 3: 000_SAR_README.md에 목록 추가
+  테이블에 새로운 SAR 행 추가
+
+Step 4: Check List 업데이트 (중요!)
+  Self Test 항목에 동일 오류 방지용 체크 항목 추가
+  
+  예시 (기존):
+  □ Self Test 최종 확인
+    □ 코드 완성도: 모든 함수 구현됨
+    
+  예시 (개선):
+  □ Self Test 최종 확인
+    □ 코드 완성도: 모든 함수 구현됨
+    □ Null 체크: 모든 외부 입력값에 포함 (SAR-001)
+    □ 토큰 만료 처리: 엣지 케이스 검증 (SAR-001)
+
+Step 5: 코드 수정 & 재테스트
+  npm test 재실행 → 모든 테스트 통과 확인
+```
+
+**참고:**
+- SAR 작성 규칙: [docs/081_Self_Audit/SAR_RP_개요.md](../081_Self_Audit/SAR_RP_개요.md)
+- SAR 목록 관리: [docs/081_Self_Audit/000_SAR_README.md](../081_Self_Audit/000_SAR_README.md)
 
 ---
 
@@ -1006,6 +1084,11 @@ gh pr create --ready
      □ 기술 스택 검증: ✓
      □ 문서 검증: ✓
      □ 팀 합의: ✓
+  □ ⭐ SAR 작성 (Self Check 미통과 시)
+     □ SAR 파일 생성
+     □ 현상/원인/조치 기록
+     □ 000_SAR_README.md 업데이트
+     □ Check List 항목 추가
 
 □ 구현 단계 (Execute)
   □ 파일 구조 생성 (Claude)
@@ -1019,6 +1102,11 @@ gh pr create --ready
      □ 수동 기능 테스트: ✓
      □ 보안 검증: ✓
      □ Self Check 최종: ✓
+  □ ⭐ SAR 작성 (Self Test 미통과 시)
+     □ SAR 파일 생성
+     □ 현상/원인/조치/검증 기록
+     □ 000_SAR_README.md 업데이트
+     □ Check List 항목 추가
 
 □ 검증 단계 (Verify)
   □ ZEN_A4 Stop 게이트 통과
@@ -1027,7 +1115,10 @@ gh pr create --ready
   □ Git 커밋
   □ PR 생성 & 승인 & 병합
 
-⭐ 완료 조건: 모든 ⭐ Self Check & Test 통과 필수
+⭐ 완료 조건:
+  - Self Check & Test 모두 통과
+  - 미통과 시 반드시 SAR 작성
+  - Check List 업데이트로 재발 방지
 ```
 
 ---

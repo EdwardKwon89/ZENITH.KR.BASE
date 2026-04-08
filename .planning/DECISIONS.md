@@ -229,9 +229,130 @@ Phase 2 (Execute) 완료 조건:
 **참고:**
 
 - 상세 절차: docs/000_GUIDE/INTEGRATED_DEVELOPMENT_METHODOLOGY.md
-  - Phase 1 (Plan): 1-5 Self Check
-  - Phase 2 (Execute): 2-6 Self Test
+  - Phase 1 (Plan): 1-5 Self Check, 1-6 SAR 작성
+  - Phase 2 (Execute): 2-6 Self Test, 2-7 SAR 작성
   - Phase 3 (Verify): 3-1 자동 품질 게이트
+
+---
+
+### 4. Self_Audit_Report (SAR) 도입 (2026-04-08)
+
+**컨텍스트:**
+- Self Check & Self Test에서 발견된 오류에 대한 체계적 기록 필요
+- 동일 오류의 재발 방지 메커니즘 부재
+- 팀 학습 및 프로세스 개선을 위한 자산 부족
+
+**결정:**
+
+- **Self_Audit_Report (SAR)** 체계 도입
+- Self Check/Self Test 미통과 시 필수로 SAR 작성
+- SAR 작성 후 Check List 업데이트로 재발 방지
+
+**근거:**
+
+1. **오류 추적성**
+   - 모든 오류가 기록되고 추적 가능
+   - 근본 원인 분석 가능
+   - 패턴 식별 가능
+
+2. **재발 방지**
+   - Check List 업데이트로 다음 작업에서 동일 오류 방지
+   - 예방적 조치 추가
+   - 조직 학습 축적
+
+3. **팀 학습**
+   - 모든 팀원이 오류 경험 학습
+   - 베스트 프랙티스 공유
+   - 품질 문화 강화
+
+4. **프로세스 개선**
+   - SAR 분석으로 프로세스 문제 식별
+   - 주기적 개선 가능
+   - 근본 원인 해결
+
+**SAR 작성 규칙:**
+
+```text
+파일 구조:
+docs/081_Self_Audit/
+├─ SAR_RP_개요.md (작성 규칙)
+├─ 000_SAR_README.md (SAR 목록 & 관리)
+└─ SAR_reports/
+   └─ SAR_YYYY-MM-DD_NNN_문제_분류.md
+
+필수 구성:
+├─ 메타정보 (버전, 작성일, 작성자, 개요)
+├─ 본문 (현상, 원인, 조치, 검증, 예방)
+└─ 개정이력
+
+필수 작업:
+1. SAR 작성
+2. 000_SAR_README.md에 목록 추가
+3. Check List 업데이트 (재발 방지)
+4. 코드 수정 & 테스트
+```
+
+**워크플로우 변경:**
+
+```text
+기존:
+Self Check/Test 미통과 → 코드 수정 → 재테스트
+
+개선:
+Self Check/Test 미통과 
+  ↓
+SAR 작성 (현상/원인/조치/예방)
+  ↓
+Check List 업데이트
+  ↓
+코드 수정 → 재테스트
+  ↓
+SAR 최종화
+```
+
+**SAR 작성 예시:**
+
+```
+Self Test에서 Null Reference 오류 발견
+  ↓
+SAR 생성: SAR_2026-04-08_001_RefreshToken_NullReference.md
+  ↓
+SAR 작성:
+  - 현상: refreshToken() 함수에서 null reference 오류
+  - 원인: 토큰 조회 실패 시 null 체크 누락
+  - 조치: null 체크 추가, 테스트 케이스 추가
+  - 예방: Check List에 "Null 체크" 항목 추가
+  ↓
+Check List 업데이트:
+  기존: □ 코드 완성도
+  개선: □ 코드 완성도
+        □ Null 체크: 모든 외부 입력 (SAR-001)
+  ↓
+다음 작업에서 동일 오류 자동 방지
+```
+
+**영향범위:**
+
+- Phase 1 (Plan) 및 Phase 2 (Execute) 워크플로우
+- Self Check/Self Test 절차
+- Check List 지속적 개선
+- 예상 추가 시간: +15~30분/오류
+
+**기대 효과:**
+
+- 오류 재발: -50~70%
+- Check List 충실도: +40%
+- 팀 학습 효율: +30%
+- 품질 문화 강화
+- 프로세스 개선 가속화
+
+**상태:** 진행중
+
+**참고:**
+
+- SAR 작성 상세 규칙: docs/081_Self_Audit/SAR_RP_개요.md
+- SAR 목록 관리: docs/081_Self_Audit/000_SAR_README.md
+- 통합 절차: docs/000_GUIDE/INTEGRATED_DEVELOPMENT_METHODOLOGY.md
 
 ---
 
