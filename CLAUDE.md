@@ -51,7 +51,7 @@
    - SAR 작성: Self Check/Test 미통과 시 필수
    - 저장위치: `docs/081_Self_Audit/SAR_reports/SAR_YYYY-MM-DD_NNN_문제_분류.md`
    - Check List 업데이트: SAR 작성 후 필수 (동일 오류 방지)
-   - 자세히: [SAR 관리](docs/081_Self_Audit/000_SAR_README.md)
+   - 자세히: [SAR 작성 규칙](docs/000_GUIDE/SAR_RULE.md) / [Check List 절차](docs/000_GUIDE/CHECK_LIST_PROCEDURE.md)
 
 5. **도구 역할 분담**
    - **Ollama**: 함수 자동완성 (Tab) → 개발 시간의 70%
@@ -164,8 +164,51 @@ cp -r docs/090_TEMPLATES/* [새프로젝트]/docs/
 
 ---
 
+### 🔄 SAR & Check List 운영 절차 (실 프로젝트 적용, Option 1)
+
+**목표:** 점진적 오류 감소 + 팀 학습 + 자동화
+
+**절차:**
+
+1. **SAR 작성** (Phase 1/2/3에서 오류 발견 시)
+   - 파일: `docs/081_Self_Audit/SAR_reports/SAR_YYYY-MM-DD_NNN_Category_설명.md`
+   - 규칙: [SAR 작성 규칙](docs/000_GUIDE/SAR_RULE.md) 참고
+   - 심각도: CRITICAL / HIGH / MEDIUM / LOW
+
+2. **Check List 생성** (SAR 작성 후 같은 날)
+   - 출처: SAR의 "Prevention" 섹션
+   - 저장: Phase 1/2/3 체크리스트 해당 섹션에 추가
+   - 절차: [Check List 관리 절차](docs/000_GUIDE/CHECK_LIST_PROCEDURE.md) 참고
+
+3. **Check List 검증** (새 기능 시작 시)
+   - Phase 1: Design 관련 항목 확인
+   - Phase 2: Implementation 관련 항목 확인
+   - Phase 3: Security/Performance 관련 항목 확인
+
+4. **월간 검토** (매월 마지막 주 금요일)
+   - SAR 통계 분석 (분류별, 심각도별)
+   - Check List 중복 정리 & 불필요 항목 제거
+   - 팀 회의에서 주요 오류 공유
+
+**기대 효과 (1-3개월):**
+
+- Month 1: 오류율 50-60% 감소
+- Month 2: 오류율 75-80% 감소
+- Month 3+: 오류율 90%+ 감소
+
+**자동화 검토 (1개월 후):**
+
+- Check List 항목 > 40개 → 카테고리화
+- SAR 파일 > 50개 → 데이터베이스화 고려
+- 월간 검토 시간 > 1시간 → 자동 분류 도구 고려
+- 그 외: 현재 수동 방식 유지
+
+---
+
 ### 🔗 기타 참고 문서
 
 - [통합 개발 방법론](docs/000_GUIDE/INTEGRATED_DEVELOPMENT_METHODOLOGY.md)
 - [기술 의사결정 기록](/.planning/DECISIONS.md)
 - [프로젝트 컨텍스트](/.planning/CONTEXT.md)
+- [SAR 작성 규칙](docs/000_GUIDE/SAR_RULE.md)
+- [Check List 관리 절차](docs/000_GUIDE/CHECK_LIST_PROCEDURE.md)
